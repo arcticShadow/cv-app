@@ -43,10 +43,10 @@
         --space-lg: clamp(1.5rem, 3vw, 2rem);
         --font-sans: system-ui, -apple-system, sans-serif;
         --font-mono: 'SF Mono', Monaco, 'Courier New', monospace;
-        --text-base: clamp(1rem, 1.2vw, 1.25rem);
-        --text-h1: clamp(1.5rem, 3vw, 2.5rem);
-        --text-h2: clamp(1.25rem, 2.5vw, 2rem);
-        --text-h3: clamp(1.125rem, 2vw, 1.5rem);
+        --text-base: clamp(0.875rem, 1vw, 1rem);
+        --text-h1: clamp(1.25rem, 2.5vw, 2rem);
+        --text-h2: clamp(1.1rem, 2vw, 1.6rem);
+        --text-h3: clamp(1rem, 1.5vw, 1.25rem);
     }
     body {
         color: var(--text-primary);
