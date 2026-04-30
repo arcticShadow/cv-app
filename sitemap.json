@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Overview",
+    "path": "content/overview.md"
+  },
+  {
+    "title": "Work Experience",
+    "children": [
+      "content/experience/lead-dev.md"
+    ]
+  },
+  {
+    "title": "Projects",
+    "children": [
+      "content/projects/cv-app.md"
+    ]
+  }
+]
