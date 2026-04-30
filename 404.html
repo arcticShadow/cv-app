@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+<head><script>
+    const path = window.location.pathname;
+    const page = path === '/' ? '' : path.replace(/^\//, '');
+    window.location.replace('/?page=' + page);
+</script></head>
+</html>
