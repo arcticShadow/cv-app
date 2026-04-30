@@ -254,6 +254,26 @@ This project was built using parallel subagent workstreams:
 - **Test locally**: Use `caddy file-server` for local development
 - **Lighthouse target**: 100/100 for accessibility and performance
 
+## Session Handoff (2026-04-30)
+
+**Moved from mdm-experiment**: All `docs/superpowers/` files moved to this repo (`docs/superpowers/specs/`, `docs/superpowers/plans/`).
+
+**Current State**:
+- 19 commits in `/Users/cole/repos/cv-app`
+- All workstreams complete (Foundation, Content, CSS, JS, HTML, PWA, SW, CI/CD)
+- Theme: "Engineered Slate" with brand layer implemented
+- Layout: "Technical Ledger" (720px centered, glassmorphism header, vertical rhythm)
+- Compact typography and consistent spacing applied
+
+**Next Steps for New Agent**:
+1. Review `AGENTS.md` (this file) for all established practices
+2. Replace placeholders in `config.json`, `index.html`, `manifest.json`
+3. Create GitHub repo, push code, enable GitHub Pages
+4. Run through `TESTING.md` for validation
+5. Populate real CV content in `content/` markdown files
+
+**Key Constraint**: This session used parallel subagent workstreams. Future work should follow the same Standards-First, zero-dependency philosophy.
+
 ## Current Focus
 
 With the "Engineered Slate" theme and "Technical Ledger" layout now complete, future work may involve:
