@@ -1,0 +1,17 @@
+[tools]
+caddy = "2"
+chromium = "latest"
+
+[tasks.pdf]
+run = """
+# Start Caddy static file server (serves repo root on :8080)
+caddy file-server --listen :8080 &
+CADDY_PID=$!
+
+# Wait for server to start, then run headless Chromium
+sleep 2
+chromium --headless --disable-gpu --print-to-pdf=cv.pdf --no-sandbox "http://localhost:8080/full?view=print"
+
+# Kill Caddy after PDF generation
+kill $CADDY_PID
+"""

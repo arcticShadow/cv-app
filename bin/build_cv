@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+echo "=== CV PDF Builder ==="
+echo "Step 1: Checking/installing mise..."
+bash bin/mise-bootstrap.sh
+
+echo "Step 2: Installing tools via mise..."
+mise install
+
+echo "Step 3: Generating PDF..."
+mise run pdf
+
+echo "Done! PDF saved to cv.pdf"
