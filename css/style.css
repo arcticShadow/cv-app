@@ -5,6 +5,9 @@
    Frugal on Power: On OLED screens, this dark palette saves battery.
    Competence Porn Aesthetic: Inspired by GitHub dark mode and professional IDEs. */
 
+/* Explicit layer order: reset < brand < base < components < layout < print */
+@layer reset, brand, base, components, layout, print;
+
 /* Layer: reset (lowest specificity) */
 @layer reset {
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,14 +15,28 @@
     body { min-height: 100vh; }
 }
 
-/* Layer: base - tokens via custom properties */
-@layer base {
+/* Layer: brand - ALL color tokens for Engineered Slate theme */
+@layer brand {
     :root {
+        /* Background & Text */
         --bg-primary: #0D1117;
         --text-primary: #E6EDF3;
-        --brand-green: #2EA043;
-        --link-cyan: #58A6FF;
-        --text-muted: #8B949E;
+
+        /* Brand Colors */
+        --brand-green: #2EA043;  /* Success Green: buttons, active states */
+        --link-cyan: #58A6FF;   /* Blueprint Blue: links */
+        --text-muted: #8B949E;   /* Muted: metadata, secondary info */
+
+        /* Print Override Colors (consumed by print layer) */
+        --print-bg: #FFFFFF;
+        --print-text: #1A1A1A;
+        --print-brand: #1B662C;
+    }
+}
+
+/* Layer: base - spacing, typography tokens, references brand layer */
+@layer base {
+    :root {
         --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
         --space-sm: clamp(0.5rem, 1vw, 1rem);
         --space-md: clamp(1rem, 2vw, 1.5rem);
@@ -39,7 +56,12 @@
         line-height: 1.6;
     }
     a { color: var(--link-cyan); }
-    code { font-family: var(--font-mono); background: #1a1a2e; padding: 0.2em 0.5em; border-radius: 0.5rem; }
+    code {
+        font-family: var(--font-mono);
+        background: #1a1a2e;
+        padding: 0.2em 0.5em;
+        border-radius: 0.5rem;
+    }
     h1, h2, h3 { font-family: var(--font-mono); }
     h1 { font-size: var(--text-h1); color: var(--text-primary); }
     h2 { font-size: var(--text-h2); color: var(--text-primary); }
@@ -59,7 +81,6 @@
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        font-family: var(--font-mono);
     }
 
     /* Sticky header with glassmorphism */
@@ -136,20 +157,19 @@
         }
     }
 }
-}
 
 /* Layer: print (highest specificity) */
 @layer print {
     @media print, body[data-view="print"] {
         :root {
             --text-base: 12pt;
-            --bg-primary: #FFFFFF;
-            --text-primary: #1A1A1A;
-            --brand-green: #1B662C;
+            --bg-primary: var(--print-bg);
+            --text-primary: var(--print-text);
+            --brand-green: var(--print-brand);
         }
         body { display: block; font-size: 12pt; color: var(--text-primary); background: var(--bg-primary); }
         nav, footer { display: none !important; }
-        main { max-width: none; padding: 0; }
+        main { max-width: none; padding: 0; border: none; box-shadow: none; }
         a { color: #0066cc; }
         a::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
         p, li { orphans: 3; widows: 3; }
