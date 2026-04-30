@@ -1,0 +1,13 @@
+{
+  "name": "CV - Your Full Name",
+  "short_name": "CV",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}
