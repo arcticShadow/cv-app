@@ -10,10 +10,11 @@
 /* Layer: base - tokens via custom properties */
 @layer base {
     :root {
-        --color-text: #1a1a1a;
-        --color-bg: #ffffff;
-        --color-accent: #0066cc;
-        --color-link: #0066cc;
+        --bg-primary: #0D1117;
+        --text-primary: #E6EDF3;
+        --brand-green: #2EA043;
+        --link-cyan: #58A6FF;
+        --text-muted: #8B949E;
         --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
         --space-sm: clamp(0.5rem, 1vw, 1rem);
         --space-md: clamp(1rem, 2vw, 1.5rem);
@@ -26,34 +27,36 @@
         --text-h3: clamp(1.125rem, 2vw, 1.75rem);
     }
     body {
-        color: var(--color-text);
-        background: var(--color-bg);
+        color: var(--text-primary);
+        background: var(--bg-primary);
         font-family: var(--font-sans);
         font-size: var(--text-base);
         line-height: 1.6;
     }
-    a { color: var(--color-link); }
-    code { font-family: var(--font-mono); background: #f4f4f4; padding: 0.1em 0.3em; }
+    a { color: var(--link-cyan); }
+    code { font-family: var(--font-mono); background: #1a1a1a; padding: 0.1em 0.3em; border-radius: 3px; }
 }
 
 /* Layer: components */
 @layer components {
     experience-entry, project-entry { display: block; margin-bottom: var(--space-lg); }
-    experience-entry h3, project-entry h3 { font-size: var(--text-h3); margin-bottom: var(--space-xs); }
-    .meta { color: #666; font-size: 0.9em; margin-bottom: var(--space-sm); }
+    experience-entry h3, project-entry h3 { font-size: var(--text-h3); margin-bottom: var(--space-xs); color: var(--text-primary); }
+    .meta { color: var(--text-muted); font-size: 0.9em; margin-bottom: var(--space-sm); }
+    nav a:hover { color: var(--brand-green); }
 }
 
 /* Layer: layout */
 @layer layout {
     body { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }
-    nav { padding: var(--space-md); border-right: 1px solid #eee; }
-    nav a { display: block; padding: var(--space-xs) 0; text-decoration: none; }
-    nav a:hover { text-decoration: underline; }
+    nav { padding: var(--space-md); border-right: 1px solid var(--text-muted); }
+    nav a { display: block; padding: var(--space-xs) 0; text-decoration: none; color: var(--text-primary); }
+    nav a:hover { text-decoration: underline; color: var(--brand-green); }
     main { padding: var(--space-md); max-width: 800px; }
     @media (max-width: 768px) {
-        body { grid-template-columns: 1fr; }
-        nav { border-right: none; border-bottom: 1px solid #eee; }
+        body { grid-template-columns:1fr; }
+        nav { border-right: none; border-bottom: 1px solid var(--text-muted); }
     }
+}
 }
 
 /* Layer: print (highest specificity) */
