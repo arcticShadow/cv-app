@@ -1,4 +1,9 @@
 /* css/style.css */
+/* Theme: "Engineered Slate"
+   Identity: Professional, precise, and unpretentious.
+   Conveys content built the "proper" way—like a high-density dashboard or technical manual.
+   Frugal on Power: On OLED screens, this dark palette saves battery.
+   Competence Porn Aesthetic: Inspired by GitHub dark mode and professional IDEs. */
 
 /* Layer: reset (lowest specificity) */
 @layer reset {
@@ -62,10 +67,16 @@
 /* Layer: print (highest specificity) */
 @layer print {
     @media print, body[data-view="print"] {
-        :root { --text-base: 12pt; }
-        body { display: block; font-size: 12pt; }
+        :root {
+            --text-base: 12pt;
+            --bg-primary: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --brand-green: #1B662C;
+        }
+        body { display: block; font-size: 12pt; color: var(--text-primary); background: var(--bg-primary); }
         nav, footer { display: none !important; }
         main { max-width: none; padding: 0; }
+        a { color: #0066cc; }
         a::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
         p, li { orphans: 3; widows: 3; }
         section { break-before: page; }
