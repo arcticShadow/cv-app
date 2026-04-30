@@ -1,0 +1,17 @@
+name: Build PDF on Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: mise install
+      - run: mise run pdf
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: cv.pdf
