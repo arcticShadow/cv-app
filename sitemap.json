@@ -6,7 +6,18 @@
   {
     "title": "Work Experience",
     "children": [
-      "content/experience/lead-dev.md"
+      "content/experience/flicket.md",
+      "content/experience/hectre.md",
+      "content/experience/rush.md",
+      "content/experience/auckland-council.md",
+      "content/experience/veve.md",
+      "content/experience/joyous.md",
+      "content/experience/easycrypto.md",
+      "content/experience/spidertracks-technical.md",
+      "content/experience/spidertracks-practice.md",
+      "content/experience/tmnz.md",
+      "content/experience/orionhealth.md",
+      "content/experience/netactive.md"
     ]
   },
   {

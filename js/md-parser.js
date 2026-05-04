@@ -31,21 +31,71 @@ export function parseMarkdown(mdString) {
     result.html = result.html.replace(/`(.+?)`/g, '<code>$1</code>');
     result.html = result.html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
     
-    // Wrap consecutive non-heading lines in <p> tags
+    // Wrap consecutive non-heading lines in <p> tags, handle lists
     const lines = result.html.split('\n');
     const wrapped = [];
     let para = [];
+    let currentListType = null; // 'ul' or 'ol'
+    let listItems = [];
+
+    const flushList = () => {
+        if (currentListType) {
+            const items = listItems.map(item => `<li>${item}</li>`).join('');
+            wrapped.push(`<${currentListType}>${items}</${currentListType}>`);
+            currentListType = null;
+            listItems = [];
+        }
+    };
+    const flushPara = () => {
+        if (para.length) {
+            wrapped.push(`<p>${para.join(' ')}</p>`);
+            para = [];
+        }
+    };
+
     lines.forEach(line => {
         if (line.match(/^<h[1-6]>.*<\/h[1-6]>$/)) {
-            if (para.length) { wrapped.push(`<p>${para.join(' ')}</p>`); para = []; }
+            flushList();
+            flushPara();
             wrapped.push(line);
         } else if (line.trim()) {
-            para.push(line);
+            // Check for unordered list item (- or *)
+            const ulMatch = line.match(/^[-*] (.+)$/);
+            // Check for ordered list item (1. 2. etc)
+            const olMatch = line.match(/^\d+\. (.+)$/);
+
+            if (ulMatch) {
+                const content = ulMatch[1];
+                if (currentListType === 'ul') {
+                    listItems.push(content);
+                } else {
+                    flushList();
+                    flushPara();
+                    currentListType = 'ul';
+                    listItems.push(content);
+                }
+            } else if (olMatch) {
+                const content = olMatch[1];
+                if (currentListType === 'ol') {
+                    listItems.push(content);
+                } else {
+                    flushList();
+                    flushPara();
+                    currentListType = 'ol';
+                    listItems.push(content);
+                }
+            } else {
+                flushList();
+                para.push(line);
+            }
         } else {
-            if (para.length) { wrapped.push(`<p>${para.join(' ')}</p>`); para = []; }
+            flushList();
+            flushPara();
         }
     });
-    if (para.length) wrapped.push(`<p>${para.join(' ')}</p>`);
+
+    flushList();
+    flushPara();
     result.html = wrapped.join('\n');
     
     return result;

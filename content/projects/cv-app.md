@@ -1,20 +1,33 @@
 ---
 title: CV App
 name: Standards-First CV App
-url: https://github.com/yourusername/cv-app
-tech_stack: JavaScript, CSS, HTML, Caddy, Chromium
+url: https://github.com/arcticShadow/cv-app
+tech_stack: JavaScript (ESM), CSS (@layer), HTML5, Caddy, Chromium, mise
 start_date: 2026-04
 end_date: null
 ---
 
-# Standards-First CV App
+A zero-dependency CV web app built entirely through AI-human collaboration — 100% coded by AI with human oversight directing how and what was built, and final say on what ships. This project represents a new era of engineering: the engineer as orchestrator. Deep technical knowledge remains essential, but the skill now lies in conveying requirements and architectural decisions to AI to build.
 
-**Open-source project** | *2026 - Present*
+## Philosophy
 
-A zero-dependency CV web app using native browser APIs only. Features SPA routing via Navigation API, client-side markdown rendering, and PDF generation via headless Chromium.
+**Standards-First** — Zero frameworks, zero dependencies, pure browser-native APIs. If the browser doesn't support it natively, we don't use it.
 
-## Technical Highlights
+## Technical Implementation
 
-- Single CSS file with @layer for reset, base, components, layout, print
-- Custom Elements without Shadow DOM using global CSS custom properties
-- GitHub Pages SPA via 404.html hack with pretty URLs
+- **Navigation API** (not History API) for SPA routing — modern, purpose-built for this use case
+- **CSS @layer** with explicit cascade order: reset → brand → base → components → layout → print
+- **CSS custom properties** for theming — "Engineered Slate" dark theme with print layer overrides
+- **Custom Elements** (without Shadow DOM) — reusable components with global CSS inheritance
+- **Client-side markdown parsing** — swappable `parseMarkdown()` function, no external dependencies
+- **Fluid typography** via `clamp()` — responsive sizing without media query bloat
+- **GitHub Pages SPA** via 404.html hack — pretty URLs without address bar query params
+- **Service Worker** with cache-first strategy for offline capability
+- **PDF generation** via headless Chromium + Caddy — self-bootstrapping `mise` task
+- **PWA manifest** for installability
+- **`rel="me"` identity links** for cross-platform identity verification
+- **Print layer overrides** — A4 sizing, page breaks, link expansion for paper output
+
+## Development Approach
+
+Built using parallel subagent workstreams (Foundation, Content, CSS, JS, HTML, PWA, SW, CI/CD) with systematic AGENTS.md documentation for session handoff and AI collaboration.

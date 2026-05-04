@@ -5,8 +5,11 @@ import { parseMarkdown } from './md-parser.js';
 import './components/experience-entry.js';
 import './components/project-entry.js';
 
+const BASE_PATH = window.location.pathname.startsWith('/cv-app/') ? '/cv-app' : '';
+
 function getPageFromPath(path) {
-    return path === '/' ? null : path.replace(/^\//, '').replace(/\.html$/, '');
+    const stripped = path.replace(new RegExp('^' + BASE_PATH + '/?'), '');
+    return stripped === '' ? null : stripped.replace(/\.html$/, '');
 }
 
 async function renderSection(page) {
@@ -29,7 +32,7 @@ async function renderSection(page) {
         return s.title.toLowerCase().replace(/\s+/g, '-') === page;
     }) || sitemap[0];
     
-    const titleEl = document.createElement('h2');
+    const titleEl = document.createElement('h1');
     titleEl.textContent = section.title;
     main.appendChild(titleEl);
     
@@ -62,12 +65,12 @@ async function buildNav() {
     sitemap.forEach(section => {
         const a = document.createElement('a');
         const slug = section.title.toLowerCase().replace(/\s+/g, '-');
-        a.href = `/${slug}`;
+        a.href = `${BASE_PATH}/${slug}`;
         a.textContent = section.title;
         nav.appendChild(a);
     });
     const fullLink = document.createElement('a');
-    fullLink.href = '/full';
+    fullLink.href = `${BASE_PATH}/full`;
     fullLink.textContent = 'Full CV';
     nav.appendChild(fullLink);
 }
@@ -76,7 +79,7 @@ function handleInitialLoad() {
     const params = new URLSearchParams(window.location.search);
     const pageParam = params.get('page');
     if (pageParam) {
-        const prettyPath = `/${pageParam}`;
+        const prettyPath = `${BASE_PATH}/${pageParam}`;
         window.history.replaceState(null, '', prettyPath);
         return pageParam;
     }

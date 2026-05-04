@@ -2,7 +2,8 @@
 <html>
 <head><script>
     const path = window.location.pathname;
-    const page = path === '/' ? '' : path.replace(/^\//, '');
-    window.location.replace('/?page=' + page);
+    const base = path.startsWith('/cv-app/') ? '/cv-app' : '';
+    const page = path === '/' + (base ? 'cv-app/' : '') ? '' : path.replace(new RegExp('^' + base + '/?'), '');
+    window.location.replace(base + '/?page=' + page);
 </script></head>
 </html>
