@@ -1,6 +1,6 @@
 [tools]
 caddy = "2"
-chromium = "latest"
+# chromium = "latest"
 
 [tasks.pdf]
 run = """

@@ -3,7 +3,7 @@
 <head><script>
     const path = window.location.pathname;
     const base = path.startsWith('/cv-app/') ? '/cv-app' : '';
-    const page = path === '/' + (base ? 'cv-app/' : '') ? '' : path.replace(new RegExp('^' + base + '/?'), '');
-    window.location.replace(base + '/?page=' + page);
+    const fullPath = path === '/' + (base ? 'cv-app/' : '') ? '' : path.replace(new RegExp('^' + base + '/?'), '');
+    window.location.replace(base + '/?page=' + encodeURIComponent(fullPath));
 </script></head>
 </html>

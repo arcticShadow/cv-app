@@ -7,7 +7,7 @@ start_date: 2026-04
 end_date: null
 ---
 
-A zero-dependency CV web app built entirely through AI-human collaboration — 100% coded by AI with human oversight directing how and what was built, and final say on what ships. This project represents a new era of engineering: the engineer as orchestrator. Deep technical knowledge remains essential, but the skill now lies in conveying requirements and architectural decisions to AI to build.
+A zero-dependency CV web app built entirely through AI-human collaboration — 100% coded by AI with human oversight directing how and what was built, and final say on what ships. If im being perfectly honest - this project has been my first attempt at 'not looking at the code' but rather focusing on the outputs. If its works, and it passed my validations then its fit for purpose. This project represents a new era of engineering: the engineer as orchestrator. Deep technical knowledge remains essential, but the skill now lies in conveying requirements and architectural decisions to AI to build.
 
 ## Philosophy
 
