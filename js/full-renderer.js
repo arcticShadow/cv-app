@@ -1,7 +1,7 @@
 // js/full-renderer.js
 import { getSitemap } from './sitemap.js';
 import { getConfig } from './config.js';
-import { parseMarkdown } from './md-parser.js';
+import { getContent } from './content-cache.js';
 import './components/experience-entry.js';
 import './components/project-entry.js';
 
@@ -18,15 +18,11 @@ export async function renderFull(mainEl) {
         sectionEl.appendChild(titleEl);
         
         if (section.path) {
-            const res = await fetch(section.path);
-            const md = await res.text();
-            const { html } = parseMarkdown(md);
+            const { html } = await getContent(section.path);
             sectionEl.innerHTML += html;
         } else if (section.children) {
             for (const childPath of section.children) {
-                const res = await fetch(childPath);
-                const md = await res.text();
-                const parsed = parseMarkdown(md);
+                const parsed = await getContent(childPath);
                 const entry = document.createElement(section.title.includes('Project') ? 'project-entry' : 'experience-entry');
                 entry.dataset.content = JSON.stringify(parsed);
                 sectionEl.appendChild(entry);

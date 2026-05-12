@@ -76,7 +76,7 @@
 
 /* Layer: components */
 @layer components {
-    experience-entry, project-entry { display: block; margin-bottom: var(--space-lg); }
+    experience-entry, project-entry { display: block; margin-bottom: var(--space-lg); scroll-margin-top: 4rem; }
     experience-entry h3, project-entry h3 { font-size: var(--text-h3); margin-bottom: var(--space-xs); color: var(--text-primary); }
     .meta { color: var(--text-muted); font-size: 0.9em; margin-bottom: var(--space-sm); }
 }

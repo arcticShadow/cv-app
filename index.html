@@ -23,14 +23,21 @@
     <link rel="me" href="https://linkedin.com/in/cole-diffin-82027116">
     
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     
     <!-- Crawler alternate link (updated dynamically) -->
     <link rel="alternate" type="text/markdown" href="index.md">
+    <base href="">
+    <script>
+        // This small block ensures we get the correct base value between local and deployed versions. 
+        // To avoid build steps - this value is hard coded to check for the deployed path 
+        const base = document.getElementsByTagName('base')[0];
+        base.href = window.location.pathname.startsWith('/cv-app') ? '/cv-app' : '/';
+    </script>
 </head>
 <body>
     <header>
@@ -42,6 +49,6 @@
         <a rel="me" href="https://github.com/arcticShadow/cv-app">View Source on GitHub</a>
         <a rel="me" href="https://linkedin.com/in/cole-diffin-82027116">LinkedIn</a>
     </footer>
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="/js/app.js"></script>
 </body>
 </html>

@@ -1,11 +1,10 @@
-// js/app.js
 import { getSitemap } from './sitemap.js';
-import { getConfig } from './config.js';
-import { parseMarkdown } from './md-parser.js';
+import { getConfig, BASE_PATH } from './config.js';
+import { getContent } from './content-cache.js';
 import './components/experience-entry.js';
 import './components/project-entry.js';
 
-const BASE_PATH = window.location.pathname.startsWith('/cv-app/') ? '/cv-app' : '';
+
 
 function getPageFromPath(path) {
     const stripped = path.replace(new RegExp('^' + BASE_PATH + '/?'), '');
@@ -29,7 +28,7 @@ function updateNavActive(page) {
     });
 }
 
-function buildSidebar(section, main) {
+async function buildSidebar(section, main) {
     if (!section.children) return;
     
     const wrapper = document.createElement('div');
@@ -40,22 +39,26 @@ function buildSidebar(section, main) {
     sidebar.innerHTML = '<nav></nav>';
     const nav = sidebar.querySelector('nav');
     
-    section.children.forEach(childPath => {
+    const entries = await Promise.all(section.children.map(async (childPath) => {
         const fileName = childPath.split('/').pop().replace('.md', '');
-        const res = fetch(childPath).then(r => r.text()).then(md => {
-            const { frontmatter } = parseMarkdown(md);
-            const label = frontmatter.company || frontmatter.name || fileName;
-            const slug = (frontmatter.company || frontmatter.name || fileName)
-                .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            const a = document.createElement('a');
-            a.href = `${BASE_PATH}/${section.title.toLowerCase().replace(/\s+/g, '-')}/${slug}`;
-            a.textContent = label;
-            nav.appendChild(a);
-        });
-    });
+        const { frontmatter } = await getContent(childPath);
+        const label = frontmatter.company || frontmatter.name || fileName;
+        const slug = (frontmatter.company || frontmatter.name || fileName)
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const a = document.createElement('a');
+        a.href = `${BASE_PATH}/${section.title.toLowerCase().replace(/\s+/g, '-')}/${slug}`;
+        a.textContent = label;
+        return a;
+    }));
+    entries.forEach(a => nav.appendChild(a));
+    
+    const newMain = document.createElement('main');
+    while (main.firstChild) {
+        newMain.appendChild(main.firstChild);
+    }
     
     wrapper.appendChild(sidebar);
-    wrapper.appendChild(main);
+    wrapper.appendChild(newMain);
     main.parentNode.replaceChild(wrapper, main);
 }
 
@@ -68,17 +71,20 @@ function setupScrollTracking() {
     const entries = document.querySelectorAll('experience-entry, project-entry');
     if (entries.length === 0) return;
     
-    currentItem = null;
     observer = new IntersectionObserver((obsEntries) => {
         const visible = obsEntries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
         if (visible) {
             const id = visible.target.id;
-            const page = getPageFromPath(window.location.pathname);
+            const path = window.location.pathname;
+            const base = path.startsWith('/cv-app/') ? '/cv-app' : '';
+            const stripped = path.replace(new RegExp('^' + base + '/?'), '');
+            const page = stripped.split('/')[0];
             if (id && page && id !== currentItem) {
                 currentItem = id;
                 const newUrl = `${BASE_PATH}/${page}/${id}`;
-                window.history.replaceState(null, '', newUrl);
-                
+                if (newUrl !== window.location.pathname) {
+                    history.pushState(null, '', newUrl);
+                }
                 document.querySelectorAll('.section-nav nav a').forEach(a => {
                     const href = a.getAttribute('href');
                     a.classList.toggle('active', href.endsWith('/' + id));
@@ -105,12 +111,12 @@ async function renderSection(page, itemToScroll = null) {
     
     const existingWrapper = document.querySelector('.content-with-sidebar');
     if (existingWrapper) {
-        const main = existingWrapper.querySelector('main');
-        existingWrapper.parentNode.replaceChild(main, existingWrapper);
+        const oldMain = existingWrapper.querySelector('main');
+        existingWrapper.parentNode.replaceChild(oldMain, existingWrapper);
     }
     
     let mdPath = '';
-    const main = document.querySelector('main');
+    let main = document.querySelector('main');
     main.innerHTML = '';
     
     if (page === 'full') {
@@ -119,9 +125,10 @@ async function renderSection(page, itemToScroll = null) {
     }
     
     const section = sitemap.find(s => {
-        if (s.path && s.path.includes(page)) return true;
+        const slug = s.title.toLowerCase().replace(/\s+/g, '-');
+        if (page === slug) return true;
         if (s.children && s.children.some(c => c.includes(page))) return true;
-        return s.title.toLowerCase().replace(/\s+/g, '-') === page;
+        return false;
     }) || sitemap[0];
     
     const titleEl = document.createElement('h1');
@@ -130,19 +137,16 @@ async function renderSection(page, itemToScroll = null) {
     
     if (section.path) {
         mdPath = section.path;
-        const res = await fetch(section.path);
-        const md = await res.text();
-        const { html } = parseMarkdown(md);
+        const { html } = await getContent(section.path);
         const contentSection = document.createElement('section');
         contentSection.innerHTML = html;
         main.appendChild(contentSection);
     } else if (section.children) {
-        buildSidebar(section, main);
+        await buildSidebar(section, main);
+        main = document.querySelector('main');
         for (const childPath of section.children) {
             mdPath = childPath;
-            const res = await fetch(childPath);
-            const md = await res.text();
-            const parsed = parseMarkdown(md);
+            const parsed = await getContent(childPath);
             const entry = document.createElement(section.title.includes('Project') ? 'project-entry' : 'experience-entry');
             entry.dataset.content = JSON.stringify(parsed);
             main.appendChild(entry);
@@ -202,22 +206,31 @@ async function init() {
     const { page, item } = handleInitialLoad();
     await renderSection(page, item);
     
-    navigation.addEventListener('navigate', event => {
-        if (!event.canIntercept) return;
-        const url = new URL(event.destination.url);
-        const itemData = getItemFromPath(url.pathname);
-        const page = itemData ? itemData.page : getPageFromPath(url.pathname);
-        const item = itemData ? itemData.item : null;
-        event.intercept({ handler: () => renderSection(page, item) });
-    });
-}
-
-function getItemFromPath(pathname) {
-    const match = pathname.match(/^\/cv-app\/([^\/]+)\/(.+)$/);
-    if (match) return { page: match[1], item: match[2] };
-    const noBaseMatch = pathname.match(/^\/([^\/]+)\/(.+)$/);
-    if (noBaseMatch && !noBaseMatch[1].includes('.')) return { page: noBaseMatch[1], item: noBaseMatch[2] };
-    return null;
+    if (window.navigation) {
+        navigation.addEventListener('navigate', event => {
+            const url = new URL(event.destination.url);
+            if (url.origin !== location.origin || !event.canIntercept || !event.userInitiated) return;
+            
+            const path = url.pathname.replace(new RegExp('^' + BASE_PATH), '') || '/';
+            if (path === '/' || path === '/404.html') return;
+            
+            event.intercept({
+                handler: async () => {
+                    currentItem = null;
+                    const clean = path.replace(/^\//, '');
+                    const parts = clean.split('/');
+                    const page = parts[0] || null;
+                    const item = parts[1] || null;
+                    await renderSection(page, item);
+                }
+            });
+        });
+    } else {
+        window.addEventListener('popstate', () => {
+            const { page, item } = handleInitialLoad();
+            renderSection(page, item);
+        });
+    }
 }
 
 init();

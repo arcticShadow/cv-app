@@ -1,6 +1,6 @@
 // js/sitemap.js
 export async function loadSitemap() {
-    const res = await fetch('sitemap.json');
+    const res = await fetch('/sitemap.json');
     if (!res.ok) throw new Error('Failed to load sitemap.json');
     return res.json();
 }
