@@ -1,6 +1,7 @@
 ---
+title: Rush (Contract)
 company: Rush
-role: Senior Software Engineer (Hybrid, Contract)
+role: Senior Software Engineer
 start_date: 2024-03
 end_date: 2024-09
 website: https://www.rush.co.nz/

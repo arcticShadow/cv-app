@@ -10,4 +10,5 @@ location: Auckland, New Zealand
 - Designed and built a Device Management solution with AWS SSM for windows devices distributed globally.
 - Introduced AI Developer tooling and gathered widespread adoption.
 - Established a new flutter app module, architected with intent to support future expansion and growth.
+- Built a private dart package registry backed by private github release artifacts
 - Partnered with Design to bring Material Design tokens to our apps, and built a flutter theme to consume them.

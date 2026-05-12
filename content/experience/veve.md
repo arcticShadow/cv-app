@@ -1,11 +1,14 @@
 ---
+title: Veve (Contract) 
 company: Veve
-role: Senior Devops Engineer (Remote, Contract)
+role: Senior Devops Engineer
 start_date: 2023-04
 end_date: 2023-07
 website: https://www.veve.me/
 location: New Zealand
 ---
+
+Veve was a fully remote company - distributed across multiple timezones. I worked alongside teams and individuals from India to Argentina and everywhere in between.
 
 - Researched and made a recommendation on a "Workforce IAM" solution for the organisation to adopt.
 - Rolled out chosen solution for staff, integrated with BambooHR, GSuite, Github, Gitlab, AWS as well as a collection of other tooling.

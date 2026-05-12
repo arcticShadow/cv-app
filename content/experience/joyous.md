@@ -1,6 +1,7 @@
 ---
+title: Joyous (Contract)
 company: Joyous
-role: Senior Software Engineer (Contract)
+role: Senior Software Engineer
 start_date: 2023-01
 end_date: 2023-03
 website: https://www.joyoushq.com/

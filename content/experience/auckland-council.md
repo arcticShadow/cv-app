@@ -1,6 +1,7 @@
 ---
+title: Auckland Council (Contract)
 company: Auckland Council
-role: Senior Frontend Engineer (Hybrid, Contract)
+role: Senior Frontend Engineer
 start_date: 2023-06
 end_date: 2024-03
 website: https://www.aucklandcouncil.govt.nz/
