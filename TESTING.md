@@ -2,10 +2,25 @@
 
 Run these tests after all implementation is complete.
 
+## 0. Automated Test Suite
+
+Run automated tests first:
+
+```bash
+mise run test         # Run all tests
+mise run test-unit    # Run unit tests only (fast, no browser)
+mise run test-integration  # Run browser integration tests
+```
+
+### Test Structure
+- `tests/unit/` — md-parser unit tests (Node built-in, zero deps)
+- `tests/integration/` — Browser integration tests (Puppeteer)
+- `tests/helpers.mjs` — Shared test utilities (server wait, browser launch)
+
 ## 1. Local Server Test
 
 ```bash
-caddy file-server --listen :8080 &
+caddy run
 # Visit http://localhost:8080/
 # Click nav links, verify pretty URLs (/work-experience, /projects, /full)
 # Verify back/forward buttons work

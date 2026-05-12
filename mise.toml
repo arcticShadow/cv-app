@@ -2,6 +2,33 @@
 caddy = "2"
 # chromium = "latest"
 
+[tasks.install-test-deps]
+dir = "tests"
+sources = ["package.json"]
+outputs = { auto = true }
+run = "npm install --silent"
+
+[tasks.test-unit]
+dir = "tests"
+depends = ["install-test-deps"]
+run = "node --test unit/*.test.mjs"
+
+[tasks.test-integration]
+dir = "tests"
+depends = ["install-test-deps"]
+run = """
+cd .. && caddy run &
+CADDY_PID=$!
+sleep 2
+node --test --test-concurrency=1 integration/*.test.mjs
+EXIT_CODE=$?
+kill $CADDY_PID 2>/dev/null
+exit $EXIT_CODE
+"""
+
+[tasks.test]
+depends = ["test-unit", "test-integration"]
+
 [tasks.pdf]
 run = """
 # Start Caddy static file server (serves repo root on :8080)

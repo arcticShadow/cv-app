@@ -64,6 +64,7 @@ async function buildSidebar(section, main) {
 
 let observer = null;
 let currentItem = null;
+let currentPage = null;
 
 function setupScrollTracking() {
     if (observer) observer.disconnect();
@@ -160,6 +161,7 @@ async function renderSection(page, itemToScroll = null) {
     updateNavActive(page);
     
     requestAnimationFrame(() => {
+        if (itemToScroll) currentItem = itemToScroll;
         setupScrollTracking();
         if (itemToScroll) scrollToItem(itemToScroll);
     });
@@ -204,6 +206,7 @@ async function init() {
     }
     await buildNav();
     const { page, item } = handleInitialLoad();
+    currentPage = page;
     await renderSection(page, item);
     
     if (window.navigation) {
@@ -214,13 +217,27 @@ async function init() {
             const path = url.pathname.replace(new RegExp('^' + BASE_PATH), '') || '/';
             if (path === '/' || path === '/404.html') return;
             
+            const clean = path.replace(/^\//, '');
+            const parts = clean.split('/');
+            const page = parts[0] || null;
+            const item = parts[1] || null;
+            
+            if (page === currentPage && item) {
+                event.preventDefault();
+                currentItem = item;
+                history.pushState(null, '', url.pathname);
+                scrollToItem(item);
+                document.querySelectorAll('.section-nav nav a').forEach(a => {
+                    const href = a.getAttribute('href');
+                    a.classList.toggle('active', href.endsWith('/' + item));
+                });
+                return;
+            }
+            
             event.intercept({
                 handler: async () => {
                     currentItem = null;
-                    const clean = path.replace(/^\//, '');
-                    const parts = clean.split('/');
-                    const page = parts[0] || null;
-                    const item = parts[1] || null;
+                    currentPage = page;
                     await renderSection(page, item);
                 }
             });
